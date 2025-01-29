@@ -223,6 +223,47 @@ def find_spec_file() -> str:
         sys.exit(1)
     return files[0]
 
+def print_endpoint_groups(spec: Dict[str, Any]) -> None:
+    """Print all available endpoint groups (tags) from the API specification."""
+    tags = spec.get('tags', [])
+    if not tags:
+        print("No endpoint groups found in the API specification")
+        return
+
+    print("\nAvailable Endpoint Groups:")
+    for tag in tags:
+        print(f"- {tag['name']}")
+
+def print_endpoint_group_description(spec: Dict[str, Any], group_name: str) -> None:
+    """Print detailed description for a specific endpoint group."""
+    tags = spec.get('tags', [])
+    
+    # Case-insensitive matching
+    matches = [tag for tag in tags if tag['name'].lower() == group_name.lower()]
+    if not matches:
+        # Try partial matching if no exact match
+        matches = [tag for tag in tags if group_name.lower() in tag['name'].lower()]
+        
+    if not matches:
+        print(f"No endpoint group found matching '{group_name}'")
+        print("\nAvailable groups:")
+        for tag in tags:
+            print(f"- {tag['name']}")
+        return
+    
+    if len(matches) > 1:
+        print(f"Multiple endpoint groups match '{group_name}':")
+        for tag in matches:
+            print(f"- {tag['name']}")
+        return
+
+    tag = matches[0]
+    print(f"\n=== {tag['name']} API Endpoints ===\n")
+    
+    # The description is in HTML format, but we'll display it as-is since
+    # it's relatively readable even with HTML tags
+    print(tag['description'])
+
 def main():
     parser = argparse.ArgumentParser(
         description='''
@@ -256,6 +297,10 @@ This tool helps you navigate and understand API documentation by providing:
                       help='Search endpoints by pattern in path, summary, or description')
     group.add_argument('--category',
                       help='Show all endpoints and details for a specific category/tag (e.g., "users", "calls")')
+    group.add_argument('--list-groups', action='store_true',
+                      help='List all available endpoint groups')
+    group.add_argument('--describe-group',
+                      help='Show detailed description for a specific endpoint group')
     
     parser.add_argument('--grouped-by',
                        choices=['path', 'method', 'tag'],
@@ -290,6 +335,10 @@ This tool helps you navigate and understand API documentation by providing:
         search_endpoints(endpoints, args.search)
     elif args.category:
         show_category_details(spec, endpoints, args.category)
+    elif args.list_groups:
+        print_endpoint_groups(spec)
+    elif args.describe_group:
+        print_endpoint_group_description(spec, args.describe_group)
     elif args.list:
         if args.grouped_by == 'path':
             grouped = group_by_path(endpoints)

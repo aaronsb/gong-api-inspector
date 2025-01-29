@@ -41,7 +41,13 @@ Use the `download_gong_api_spec.py` script to download the Gong API specificatio
 The inspector provides simple commands to explore the API:
 
 ```bash
-# View all endpoints in a category (e.g., Users, Calls, etc.)
+# List all endpoint groups (e.g., Users, Calls, Stats)
+./inspector.py --list-groups
+
+# View detailed description of a specific endpoint group
+./inspector.py --describe-group users
+
+# View all endpoints in a category
 ./inspector.py --category users
 
 # Search across all endpoints

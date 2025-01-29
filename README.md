@@ -14,15 +14,38 @@ A command-line tool for efficiently exploring and understanding OpenAPI specific
 
 ## Installation
 
-1. Clone the repository
-2. Install dependencies:
+1. Clone the repository:
    ```bash
-   pip install requests
+   git clone https://github.com/aaronsb/gong-api-inspector.git
+   cd gong-api-inspector
    ```
-3. Make the scripts executable:
+
+2. Create and activate a virtual environment:
+   ```bash
+   # Create virtual environment
+   python -m venv venv
+
+   # Activate virtual environment
+   # On Linux/macOS:
+   source venv/bin/activate
+   # On Windows:
+   .\venv\Scripts\activate
+   ```
+
+3. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. Make the scripts executable (Linux/macOS only):
    ```bash
    chmod +x inspector.py download_gong_api_spec.py
    ```
+
+Note: Always ensure your virtual environment is activated when using the tool. You can deactivate it when done with:
+```bash
+deactivate
+```
 
 ## Downloading API Specifications
 

@@ -1,44 +1,89 @@
-# OpenAPI Spec Parser
+# API Inspector
 
-A command-line tool for efficiently parsing and exploring OpenAPI specifications. Particularly useful for coding agents and developers working with API documentation.
+A command-line tool for efficiently exploring and understanding OpenAPI specifications. Particularly useful for coding agents and developers working with API documentation.
 
 ## Features
 
-- List all available API endpoints
-- Filter endpoints by HTTP method
-- View detailed endpoint specifications
-- Access API overview and authentication details
-- Efficient handling of large API specifications
-- Clean, structured output format
-
-## Usage
-
-```bash
-# Show all endpoints
-./parse_api_spec.py api_specs.json --list
-
-# Filter endpoints by HTTP method
-./parse_api_spec.py api_specs.json --method GET
-
-# Show details for a specific endpoint
-./parse_api_spec.py api_specs.json --endpoint "/v2/calls"
-
-# View API overview and authentication details
-./parse_api_spec.py api_specs.json --info
-```
-
-## Requirements
-
-- Python 3.x
-- No external dependencies
+- Taxonomically organized API exploration
+- Multiple grouping options (by path, method, or tag)
+- Search functionality for finding specific endpoints
+- Detailed endpoint information
+- Authentication requirements inspection
+- Schema definition viewing
+- Support for multiple API platforms
 
 ## Installation
 
 1. Clone the repository
-2. Make the script executable:
+2. Install dependencies:
    ```bash
-   chmod +x parse_api_spec.py
+   pip install requests
    ```
+3. Make the scripts executable:
+   ```bash
+   chmod +x inspector.py download_gong_api_spec.py
+   ```
+
+## Downloading API Specifications
+
+Use the `download_gong_api_spec.py` script to download the Gong API specification:
+
+```bash
+# Download Gong API spec
+./download_gong_api_spec.py
+
+# Specify custom output file (optional)
+./download_gong_api_spec.py --output custom-openapi.json
+```
+
+## Usage
+
+The inspector provides simple commands to explore the API:
+
+```bash
+# View all endpoints in a category (e.g., Users, Calls, etc.)
+./inspector.py --category users
+
+# Search across all endpoints
+./inspector.py --search "recording"
+
+# View API overview
+./inspector.py --info
+
+# Check authentication requirements
+./inspector.py --auth
+
+# View data models
+./inspector.py --schema "Call"
+```
+
+For more detailed organization:
+```bash
+# List all endpoints with grouping
+./inspector.py --list --grouped-by tag   # Group by category
+./inspector.py --list --grouped-by path  # Group by URL structure
+./inspector.py --list --grouped-by method # Group by HTTP method
+
+# View specific endpoint details
+./inspector.py --endpoint "/v2/calls"
+
+# Use a specific spec file (optional)
+./inspector.py --spec-file custom-openapi.json --category users
+```
+
+The inspector automatically uses the first `*-openapi.json` file it finds in the current directory, so you don't need to specify the file unless you want to use a different one.
+
+## File Naming Convention
+
+API specification files should follow the naming pattern:
+```
+[platform]-openapi.json
+```
+
+For example:
+- gong-openapi.json
+- salesforce-openapi.json
+- github-openapi.json
 
 ## Error Handling
 
@@ -46,7 +91,18 @@ The tool includes robust error handling for:
 - File not found
 - Invalid JSON
 - Invalid endpoint paths
+- Missing authentication
 - Memory constraints
+
+## For Coding Agents
+
+The taxonomic organization makes it easy to:
+1. Get an overview of available endpoints (--list)
+2. Understand the API structure (--grouped-by)
+3. Find specific functionality (--search)
+4. Get detailed specifications (--endpoint)
+5. Verify authentication requirements (--auth)
+6. Access data models (--schema)
 
 ## Contributing
 
